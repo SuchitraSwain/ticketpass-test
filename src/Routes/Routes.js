@@ -1,6 +1,3 @@
-import React from "react";
-// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
 import { Route, Routes } from "react-router-dom";
 import Login from "../app/auth/Login";
 import AllEvent from "../app/pages/AllEvent";

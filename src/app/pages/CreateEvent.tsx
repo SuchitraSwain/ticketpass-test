@@ -129,6 +129,7 @@ const CreateEvent = () => {
                         <Field
                           type="file"
                           name="image"
+                          accept="image/*"
                           placeholder="Event Image"
                           className={`form-control ${
                             touched.image && errors.image ? "is-invalid" : ""
