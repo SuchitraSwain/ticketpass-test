@@ -1,1 +1,26 @@
 @import "~bootstrap/scss/bootstrap";
+
+body {
+  overflow-x: hidden;
+}
+
+.fill__btn {
+  background-color: #34cc98;
+  color: #fff;
+  border-radius: 50px;
+  padding: 7px 40px;
+  &:focus {
+    box-shadow: none;
+  }
+}
+.outline__btn {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #34cc98;
+  border-radius: 50px;
+  padding: 7px 50px;
+  &:focus {
+    box-shadow: none;
+  }
+
+}

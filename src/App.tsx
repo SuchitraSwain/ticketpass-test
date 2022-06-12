@@ -1,11 +1,12 @@
-import React from "react";
-import logo from "./logo.svg";
 import "bootstrap/dist/js/bootstrap.bundle";
 import "./App.scss";
-import Login from "./app/auth/Login";
+import { BrowserRouter } from "react-router-dom";
+import CustomRoutes from './Routes/Routes';
 
-function App() {
-  return <Login />;
-}
+const App: React.FC = () => (
+  <BrowserRouter>
+    <CustomRoutes />
+  </BrowserRouter>
+);
 
 export default App;

@@ -1,0 +1,21 @@
+.allevent__section {
+  .card {
+    border-color: #34cc98;
+    &:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      cursor: pointer;
+    }
+  }
+}
+
+.createEvent__section {
+  input {
+    border: 1px solid lightgray;
+    height: 48px;
+    border-radius: 50px;
+    &:focus {
+      box-shadow: none;
+      border-color: #34cc98;
+    }
+  }
+}
