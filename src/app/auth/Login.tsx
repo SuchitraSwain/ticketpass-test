@@ -1,6 +1,7 @@
 import "./Login.scss";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -12,6 +13,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  let navigate = useNavigate()
   return (
     <section className="login__section">
       <div className="container">
@@ -29,7 +31,7 @@ const Login = () => {
               validationSchema={LoginSchema}
               onSubmit={(values, { setSubmitting }) => {
                 alert("Form is validated! Submitting the form...");
-                console.log(values);
+                navigate("/");
                 setSubmitting(false);
               }}
             >

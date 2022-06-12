@@ -1,6 +1,5 @@
 import Navbar from "../layout/Navbar";
 import { eventsList } from "./EventList";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./Event.scss";
 

@@ -2,16 +2,21 @@ import React from "react";
 import Navbar from "../layout/Navbar";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { eventsList } from "./EventList";
+import { useNavigate } from "react-router-dom";
 
 const EventSchema = Yup.object().shape({
   name: Yup.string().required("Event name is required"),
   description: Yup.string().required("Description is required"),
-  startDate: Yup.string().required("Start date is required"),
-  endDate: Yup.string().required("End date is required"),
+  startDate: Yup.date().required("Start date is required"),
+  endDate: Yup.date()
+    .min(Yup.ref("startDate"), "End date can't be before Start date")
+    .required("End date is required"),
   image: Yup.string().required("Image is required"),
 });
 
 const CreateEvent = () => {
+  let navigate = useNavigate();
   return (
     <section className="createEvent__section">
       <Navbar />
@@ -28,10 +33,10 @@ const CreateEvent = () => {
               }}
               validationSchema={EventSchema}
               onSubmit={(values, { setSubmitting }) => {
-                console.log(values);
-
+               const updateEvent = [...eventsList, values];
+               console.log(updateEvent);
+               navigate("/", { state: values });
                 alert("Form is validated! Submitting the form...");
-                console.log(values);
                 setSubmitting(false);
               }}
             >
@@ -122,7 +127,7 @@ const CreateEvent = () => {
                       <div className="form-group">
                         <label className="fw-bold">Event Image</label>
                         <Field
-                          type="text"
+                          type="file"
                           name="image"
                           placeholder="Event Image"
                           className={`form-control ${
