@@ -2,5 +2,5 @@
 2. npm start
 
 
-[<img alt="alt_text" width="40px" src="src/assets/loginValidation.png" />]
-[<img alt="alt_text" width="40px" src="src/assets/mobileLogin" />]
+[<img alt="alt_text" src="src/assets/loginValidation.png" />]
+[<img alt="alt_text" src="src/assets/mobileLogin.png" />
