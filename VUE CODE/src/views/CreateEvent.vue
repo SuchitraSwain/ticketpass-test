@@ -57,11 +57,11 @@
       <div class="mt-4">
         <label class="font-bold">Image</label>
         <br />
-        <Field
+        <input
           name="image"
           type="file"
           @change="changelisten"
-          rules="ext:jpg,png"
+          accept="image/*"
           class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
         />
         <div class="invalid-feedback text-red-500 mt-2"></div>
@@ -77,14 +77,21 @@
 </template>
 
 <script setup>
-import { eventsList } from "../components/events";
 // @ is an alias to /src
 import { Form, Field } from "vee-validate";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import * as Yup from "yup";
 import { useRouter } from "vue-router";
+import { CreateEvent } from "../api/Connection.js";
+import Swal from "sweetalert2";
 const router = useRouter();
-const fileName = ref("");
+const imageFile = ref(null);
+const token = ref("");
+onMounted(() => {
+  token.value = JSON.parse(
+    sessionStorage.getItem("UserData")
+  ).data.access_token;
+});
 const EventSchema = Yup.object().shape({
   name: Yup.string().required("Event name is required"),
   description: Yup.string().required("Description is required"),
@@ -93,18 +100,46 @@ const EventSchema = Yup.object().shape({
     .min(Yup.ref("startDate"), "End date can't be before Start date")
     .required("End date is required"),
 });
-function onSubmit(values) {
-  // display form values on success
-  var num = eventsList[eventsList.length - 1].id;
-  var number = String(Number(num) + 1);
-  const updateArr = { ...values, id: number, img_url: fileName.value };
-  eventsList.push(JSON.parse(JSON.stringify(updateArr)));
-  console.log(eventsList);
-  alert("SUCCESS!! :-)\n\n" + JSON.stringify(values));
-  router.push({ name: "AllEvent" });
+function changelisten(e) {
+  imageFile.value = e.target.files[0];
+  console.log(imageFile.value);
 }
-function changelisten(event) {
-  console.log(event.target.files[0]);
-  fileName.value = event.target.files[0].name;
+function onSubmit(values) {
+  if (imageFile.value === null || typeof imageFile.value === "undefined") {
+    Swal.fire({
+      position: "top-end",
+      icon: "info",
+      title: "Please enter an image file",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
+  const events = CreateEvent(
+    values.name,
+    values.description,
+    imageFile.value,
+    Date.parse(values.startDate) / 1000,
+    Date.parse(values.endDate) / 1000,
+    token.value
+  );
+  events.then((response) => {
+    console.log(response);
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Successfully created your event",
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      router.push({ name: "AllEvent" });
+    });
+  });
 }
 </script>
+<style scoped>
+.CreateEvent {
+  text-align: center;
+  width: 50%;
+  margin: auto;
+}
+</style>

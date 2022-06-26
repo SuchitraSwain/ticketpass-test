@@ -34,7 +34,6 @@
 
       <li
         class="border border-[#34cc98] bg-gray text-[#34cc98] rounded-full px-8 mt-2 md:mx-2 sm:mx-0"
-        v-if="isLogged"
       >
         <button
           @click="onLogout"
@@ -43,45 +42,42 @@
           Logout
         </button>
       </li>
-      <li
-        class="border border-[#34cc98] bg-gray text-[#34cc98] rounded-full px-8 mt-2 md:mx-2 sm:mx-0"
-        v-if="!isLogged"
-      >
-        <button
-          @click="onLogin"
-          class="block md:inline-block px-4 py-3 no-underline text-grey-darkest hover:text-grey-darker"
-        >
-          Login
-        </button>
-      </li>
     </ul>
   </nav>
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 const router = useRouter();
-var isLogged;
-if (JSON.parse(localStorage.getItem("LoginBool"))) {
-  isLogged = true;
-} else {
-  isLogged = false;
-}
 function onCreateEvent() {
-  if (JSON.parse(localStorage.getItem("LoginBool"))) {
+  const UserData = JSON.parse(sessionStorage.getItem("UserData"));
+  console.log(UserData);
+  if (JSON.stringify(UserData) != "{}") {
     router.push({ name: "CreateEvent" });
   } else {
-    alert("Please Login First");
-    router.push("/");
+    Swal.fire({
+      position: "top-end",
+      icon: "info",
+      title: "Login Required",
+      text: "Please Login first",
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      router.push("/");
+    });
   }
 }
 function onLogout() {
-  localStorage.setItem("LoginBool", JSON.stringify(false));
-  localStorage.clear();
-  router.push("/");
-}
-
-function onLogin() {
-  router.push("/");
+  sessionStorage.setItem("UserData", JSON.stringify({}));
+  Swal.fire({
+    position: "top-end",
+    icon: "success",
+    title: "Logout successfull",
+    showConfirmButton: false,
+    timer: 1500,
+  }).then(() => {
+    router.push("/");
+  });
 }
 
 function gotoAllevent() {

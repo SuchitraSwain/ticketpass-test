@@ -17,7 +17,7 @@
           type="text"
           class="form-control appearance-none h-[50px] border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-[#34cc98] focus:shadow-outline"
           :class="{ 'is-invalid': errors.email }"
-          placeholder="Enter Email"
+          placeholder="test@ticketpass.org"
         />
         <div class="invalid-feedback text-red-500 mt-2 text-center">
           {{ errors.email }}
@@ -29,7 +29,7 @@
           type="password"
           class="mt-5 form-control appearance-none h-[50px] border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-[#34cc98] focus:shadow-outline"
           :class="{ 'is-invalid': errors.password }"
-          placeholder="Enter Password"
+          placeholder="Ticketpass2022"
         />
         <div class="invalid-feedback text-red-500 mt-2 text-center">
           {{ errors.password }}
@@ -49,7 +49,9 @@
 // @ is an alias to /src
 import { Form, Field } from "vee-validate";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
+import { getEvent, getEvents, login } from "../api/Connection.js";
 const router = useRouter();
 const schema = Yup.object().shape({
   email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -59,8 +61,29 @@ const schema = Yup.object().shape({
 });
 function onSubmit(values) {
   // display form values on success
-  alert("SUCCESS!! :-)\n\n" + JSON.stringify(values));
-  localStorage.setItem('LoginBool',JSON.stringify(true));
-  router.push({ name: "AllEvent" });
+  // alert("SUCCESS!! :-)\n\n" + JSON.stringify(values));
+  const loginStatus = login(values.email, values.password);
+  loginStatus
+    .then((response) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(response);
+      sessionStorage.setItem("UserData", JSON.stringify(response));
+      router.push({ name: "AllEvent" });
+    })
+    .catch((error) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Login Failed",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
 }
 </script>
